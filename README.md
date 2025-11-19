@@ -21,4 +21,4 @@ A clean and minimal address book aplication to store and manage contact informat
 
 ## 🧩Flowchart
 
-![Preview](./assets/Flowchart.png)
+![Preview](./assets/image/Flowchart.png)
