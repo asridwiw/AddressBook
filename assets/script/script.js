@@ -107,4 +107,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (deleteTargetCard) deleteTargetCard.remove();
     deleteModal.classList.add("hidden");
   };
+
+  // =========================
+  // SEARCH FEATURE
+  // =========================
+  const searchInput = document.getElementById("searchInput");
+
+  searchInput.addEventListener("input", () => {
+    const keyword = searchInput.value.toLowerCase();
+    const cards = document.querySelectorAll("section > div.glass");
+
+    cards.forEach((card) => {
+      // Ambil <p> pertama yang berisi NAME
+      const name = card.querySelectorAll("p")[0].textContent.toLowerCase();
+
+      if (name.includes(keyword)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
 });
