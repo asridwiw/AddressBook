@@ -25,12 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnAdd = $("btnAdd");
   const addModal = $("addModal");
   const closeAdd = $("closeAdd");
+  const saveAdd = $("saveAdd");
 
   const editModal = $("editModal");
   const closeEdit = $("closeEdit");
+  const saveEdit = $("saveEdit");
 
   const deleteModal = $("deleteModal");
   const closeDelete = $("closeDelete");
+  const confirmDelete = $("confirmDelete");
 
   const contactList = document.querySelector("section");
 
@@ -63,25 +66,24 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
 
-      attachButtonEvents(card);
       contactList.appendChild(card);
     });
+
+    attachButtonEvents();
   }
 
   renderContacts();
 
   btnAdd.onclick = () => addModal.classList.remove("hidden");
   closeAdd.onclick = () => addModal.classList.add("hidden");
-  closeEdit.onclick = () => editModal.classList.add("hidden");
-  closeDelete.onclick = () => deleteModal.classList.add("hidden");
 
-  const addInputs = addModal.querySelectorAll("input");
+  saveAdd.onclick = () => {
+    const inputs = addModal.querySelectorAll("input");
 
-  addModal.querySelector(".btnSaveAdd").onclick = () => {
-    const name = addInputs[0].value.trim();
-    const email = addInputs[1].value.trim();
-    const phone = addInputs[2].value.trim();
-    const location = addInputs[3].value.trim();
+    const name = inputs[0].value.trim();
+    const email = inputs[1].value.trim();
+    const phone = inputs[2].value.trim();
+    const location = inputs[3].value.trim();
 
     if (!name) return alert("Name cannot be empty!");
 
@@ -97,33 +99,40 @@ document.addEventListener("DOMContentLoaded", () => {
     saveToLocal();
     renderContacts();
 
-    addInputs.forEach((i) => (i.value = ""));
+    inputs.forEach((i) => (i.value = ""));
     addModal.classList.add("hidden");
   };
 
-  function attachButtonEvents(card) {
-    const id = card.dataset.id;
+  function attachButtonEvents() {
+    document.querySelectorAll(".btnEdit").forEach((btn) => {
+      btn.onclick = () => {
+        const card = btn.closest(".glass");
+        editTargetId = Number(card.dataset.id);
 
-    card.querySelector(".btnEdit").onclick = () => {
-      editTargetId = Number(id);
-      const contact = contacts.find((c) => c.id === editTargetId);
+        const contact = contacts.find((c) => c.id === editTargetId);
 
-      const editInputs = editModal.querySelectorAll("input");
-      editInputs[0].value = contact.fullname;
-      editInputs[1].value = contact.email;
-      editInputs[2].value = contact.phone;
-      editInputs[3].value = contact.location;
+        const inputs = editModal.querySelectorAll("input");
+        inputs[0].value = contact.fullname;
+        inputs[1].value = contact.email;
+        inputs[2].value = contact.phone;
+        inputs[3].value = contact.location;
 
-      editModal.classList.remove("hidden");
-    };
+        editModal.classList.remove("hidden");
+      };
+    });
 
-    card.querySelector(".btnDelete").onclick = () => {
-      deleteTargetId = Number(id);
-      deleteModal.classList.remove("hidden");
-    };
+    document.querySelectorAll(".btnDelete").forEach((btn) => {
+      btn.onclick = () => {
+        const card = btn.closest(".glass");
+        deleteTargetId = Number(card.dataset.id);
+        deleteModal.classList.remove("hidden");
+      };
+    });
   }
 
-  editModal.querySelector(".btnSaveEdit").onclick = () => {
+  closeEdit.onclick = () => editModal.classList.add("hidden");
+
+  saveEdit.onclick = () => {
     const inputs = editModal.querySelectorAll("input");
 
     const contact = contacts.find((c) => c.id === editTargetId);
@@ -138,7 +147,9 @@ document.addEventListener("DOMContentLoaded", () => {
     editModal.classList.add("hidden");
   };
 
-  deleteModal.querySelector(".btnConfirmDelete").onclick = () => {
+  closeDelete.onclick = () => deleteModal.classList.add("hidden");
+
+  confirmDelete.onclick = () => {
     contacts = contacts.filter((c) => c.id !== deleteTargetId);
     saveToLocal();
     renderContacts();
@@ -149,9 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   searchInput.addEventListener("input", () => {
     const keyword = searchInput.value.toLowerCase();
-    const cards = document.querySelectorAll("section > div.glass");
 
-    cards.forEach((card) => {
+    document.querySelectorAll("section > div.glass").forEach((card) => {
       const name = card.querySelector("p").textContent.toLowerCase();
       card.style.display = name.includes(keyword) ? "block" : "none";
     });
