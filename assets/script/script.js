@@ -115,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll("section > div.glass");
 
     cards.forEach((card) => {
-      // Ambil <p> pertama yang berisi NAME
       const name = card.querySelectorAll("p")[0].textContent.toLowerCase();
 
       if (name.includes(keyword)) {
