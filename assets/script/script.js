@@ -108,9 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     deleteModal.classList.add("hidden");
   };
 
-  // =========================
-  // SEARCH FEATURE
-  // =========================
   const searchInput = document.getElementById("searchInput");
 
   searchInput.addEventListener("input", () => {
